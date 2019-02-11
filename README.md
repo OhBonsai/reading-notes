@@ -12,3 +12,4 @@
 - A Python Interpreter Written in Python
 - Seven Concurrency Models in Seven Weeks
 - Writing A Compiler In Go
+- Fluent Python
