@@ -233,10 +233,10 @@ scale:
 ### 条件码
 除了整数寄存器，cpu还维护一组单个位的条件码(condition code)寄存器,这个寄存器描述最近的算术或
 逻辑操作的属性，可以检测这些寄存器的状态来执行分支指令。最常用的条件码有：
--CF: Carry Flag. The most recent operation generated a carry out of the most significant bit. Used to detect overflow for unsigned operations.
--ZF: Zero Flag. The most recent operation yielded zero.
--SF: Sign Flag. The most recent operation yielded a negative value.
--OF: Overflow Flag. The most recent operation caused a two’s-complement overflow—either negative or positive.
+- CF: Carry Flag. The most recent operation generated a carry out of the most significant bit. Used to detect overflow for unsigned operations.
+- ZF: Zero Flag. The most recent operation yielded zero.
+- SF: Sign Flag. The most recent operation yielded a negative value.
+- OF: Overflow Flag. The most recent operation caused a two’s-complement overflow—either negative or positive.
 
 ```
 -----------------------------------------------------------
@@ -246,7 +246,7 @@ scale:
 -----------------------------------------------------------
 | TEST S1,S2  |   S2 & S1                | 测试           |
 -----------------------------------------------------------
-``
+```
 
 ### 访问条件码
 条件码通常不会直接读取，常用的使用的方法有三种：
@@ -352,13 +352,7 @@ absdiff:
 	cmovge %rdx, %rax     ;if >=, rval = eval
 	ret                   ;return
 ```
-为什么在某系情况下条件数据传送代码比基于条件控制转移的代码性能要好，处理器通过流水线来获取高性能。
-在流水线中，一个指令的处理要经过一系列的阶段，每个阶段执行所需操作的一小部分，例如从内存中取指令，
-确定指令内省，从内存读数据，执行算术运算，像内存写数据。以及更新程序计数器。这种方法通过重叠
-连续指令的步骤来获取高性能。例如在取一条指令的同时，执行它前面一条指令的算术运算。要做到这一点，要求能够
-事先确定要执行的指令需略，这样才能保持流水线上充满了待执行的指令。当机器遇到条件跳转，只能靠猜测获取
-接下来要执行哪些指令。如果猜对了，那么流水线上就是满的。如果猜错了。拿就废弃之前的工作。一个错误的预测
-会浪费15~30个时钟周期。
+为什么在某系情况下条件数据传送代码比基于条件控制转移的代码性能要好，处理器通过流水线来获取高性能。在流水线中，一个指令的处理要经过一系列的阶段，每个阶段执行所需操作的一小部分，例如从内存中取指令，确定指令内省，从内存读数据，执行算术运算，像内存写数据。以及更新程序计数器。这种方法通过重叠连续指令的步骤来获取高性能。例如在取一条指令的同时，执行它前面一条指令的算术运算。要做到这一点，要求能够事先确定要执行的指令需略，这样才能保持流水线上充满了待执行的指令。当机器遇到条件跳转，只能靠猜测获取接下来要执行哪些指令。如果猜对了，那么流水线上就是满的。如果猜错了。拿就废弃之前的工作。一个错误的预测会浪费15~30个时钟周期。
 
 ### 循环
 
@@ -526,7 +520,7 @@ switch_eg:
 | ret                              |  从过程中返回                     |
 ------------------------------------------------------------------------
 
-``
+```
 
 
 ### 数据传送
@@ -537,6 +531,7 @@ switch_eg:
 
 X86-64中，通过寄存器最多传递六个整形(整数/指针)参数。寄存器的使用是由特殊顺序的。寄存器使用的名字取决于要传
 递数据类型的大小.
+
 ```
 -------------------------------------------------------------------------
 |                 |                   参数数量                          |
@@ -552,6 +547,7 @@ X86-64中，通过寄存器最多传递六个整形(整数/指针)参数。寄�
 |      8          |  %dil  |  %sil  |  %dl   |  %cl   |  %r8b  |  %r9b  |
 -------------------------------------------------------------------------
 ```
+
 如果有一个函数大于6个整形参数，超过6个部分要通过栈来传递。假设够乘P调用过程Q，有N个整形参数，且N>6。那么P的代码
 分配的栈帧必须能够容纳7到N号参数的存储控件。如图3-25所示。要把参数1~6复制到对应的寄存器。把参数7~N放到栈上，而
 参数7位于栈顶，通过栈传递参数，所有的数据大小都向8的倍数对其。参数到位以后。程序就可以执行CALL指令将控制转移到过程
@@ -625,6 +621,9 @@ caller:
 --------------------------------------------------------------
 |                                                    |  a    | <- 栈指针%rsp
 --------------------------------------------------------------
+```
+
+```
 void proc(long a1, long *a1p, int a2, int *a2p, short a3, short *a3p, char a4, char *a4p){
 		*a1p += a1;
 		*a2p += a2;
@@ -899,7 +898,6 @@ fp = fun;
 int y = 1;
 int result = fp(3, &y)
 ```
-
 
 
 
