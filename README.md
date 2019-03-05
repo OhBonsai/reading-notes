@@ -8,6 +8,7 @@
 
 
 ## 待看
+- redis设计与实现(查看rdf/aof设计思路)
 - Inside the Python Virtual Machine
 - A Python Interpreter Written in Python
 - Seven Concurrency Models in Seven Weeks
