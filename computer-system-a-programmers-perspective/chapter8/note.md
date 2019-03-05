@@ -160,9 +160,30 @@ void unsetenv(const char *name);
 
 
 
+### 发送信号
+每个进程都一个进程租,默认属于父进程的. 通过
+```
+#include <unistd.h>
+
+int setpgid(pid_t pid, pid_t pgid);
+
+```
+
+### 用alarm函数发送信号
+进程可以通过调用alarm函数向它自己发送SIGALRM信号.
+```
+#include <unistd.h>
+
+unsigned int alarm(unsigned int secs);
+```
 
 
-
+### 接受信号
+每个信号有一个预定义行为:
+- 进程中止
+- 进程终止并转储内存
+- 进程停止(挂起)直到被SIGCONT信号重启
+- 进程忽略该信号
 
 
 
