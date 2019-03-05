@@ -1,13 +1,11 @@
-#include <sys/types.h>
-#include <unistd.h>
-
+#include "csapp.h"
 
 int main()
 {
 		pid_t pid;
 		int x = 1;
 
-		pid = fork();
+		pid = Fork();
 		if (pid == 0) {
 				printf("child : x=%d\n", ++x);
 				exit(0);

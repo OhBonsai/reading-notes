@@ -110,8 +110,11 @@ pid_t getppid(void);
 - 停止： 进程的执行被suspended，且不会被调度。当收到SIGSTOP,SIGTSTP,SIGTTIN或者SIGTTOU信号时，进程就停止，
 并且保持停止直到它受到一个SIGCONT信号，在这个时刻，进程再次开始执行。
 - 终止： 进程永远的停止了
-
-Fork函数执行一次，返回两次。
+Fork函数,查看fork.c
+- Fork函执行一次，返回两次
+- 并发执行
+- 相同但是独立的地址空间
+- 共享文件
 
 
 
