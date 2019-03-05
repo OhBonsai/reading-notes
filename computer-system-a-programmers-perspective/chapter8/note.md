@@ -116,14 +116,47 @@ Fork函数,查看fork.c
 - 相同但是独立的地址空间
 - 共享文件
 
+### 回收子进程
+进程终止之后,内核并不是立即把它从系统中清楚.等待父进程回收.一个终止了但还未被回收的
+进程称为(zombie)
 
 
 
+### 让进程休眠
+```
+#include <unistd.h>
+
+unsigned int sleep(unsigned int secs);
+```
+
+### 加载并运行程序
+```
+#include <unistd.h>
+
+int execve(const char *filename, const char *argv[], const char *envp[])
+```
+
+```
+#include <stdlib.h>
+
+char *getenv(const char *name);
+
+int setenv(const char *name, const char *newvalue, int overwrite);
+void unsetenv(const char *name);
+```
+
+>>> what's difference between program and process. 
+程序是一堆代码和数据,程序可以作为目标文件存在于磁盘上,或者作为段存在地址空间中.进程是
+执行中程序的一个具体的实例;程序重视运行在某个进程的上下文的.如果你要理解`fork`和`execve`函数,理解这个差异很重要.`fork`函数在新的进程中运行相同的程序,新的子进程是父进程的一个
+复制品.`execve`函数在当前进程的上下文中加载并运行一个新的程序.它会覆盖当前进程的地址空间,但没有创建于给新进程.新的程序仍然有相同的PID.并且继承调用Execve函数已经带开了的文家描述符.
 
 
+### 利用fork和execve运行程序
 
 
-
+## 信号
+信号是一个更高层次的异常.它允许进程和内核中断其他进程, 每个信号类型都对应某种系统事件. 信号提供了一种机制,通知用户进程发生了这些异常.比如一个程序试图处以0,那么内核就发送给他
+一个SIGFPE.
 
 
 
