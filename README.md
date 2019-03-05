@@ -14,4 +14,6 @@
 - Writing A Compiler In Go
 - Fluent Python
 - Python源码剖析
+- Sqlite源码深度剖析
+- Libevent源码深度剖析
 - Structure and Interpretation of Computer Programs [课程](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/video-lectures/)
