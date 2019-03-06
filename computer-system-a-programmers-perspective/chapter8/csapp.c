@@ -34,3 +34,12 @@ void Pause(void)
 		(void)pause();
 		return;
 }
+
+unsigned int Sleep(unsigned int secs)
+{
+		unsigned int rc;
+
+		if ((rc=sleep(secs)) < 0)
+				unix_error("Sleep error");
+		return rc;
+}
