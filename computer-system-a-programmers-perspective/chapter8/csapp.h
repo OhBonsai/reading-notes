@@ -1,10 +1,24 @@
-#include <sys/types.h>
 #include <stdio.h>
-#include <errno.h>
-#include <wait.h>
 #include <stdlib.h>
-#include <signal.h>
 #include <unistd.h>
+#include <string.h>
+#include <ctype.h>
+#include <setjmp.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <errno.h>
+#include <math.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 void unix_error(char *msg);
 void posix_error(int code, char *msg);
@@ -21,5 +35,17 @@ unsigned int Alarm(unsigned int seconds);
 void Setpgid(pid_t pid, pid_t pgid);
 pid_t Getpgrp();
 
+/* Signal wrappers */
+
+typedef void handler_t(int);
+handler_t *Signal(int signum, handler_t *handler);
 
 
+/* Sio (Signal-safe I/O) routines*/
+ssize_t sio_puts(char s[]);
+ssize_t sio_putl(long v);
+void sio_error(char s[]);
+
+ssize_t Sio_puts(char []);
+ssize_t Sio_putl(long v);
+void Sio_error(char s[]);
