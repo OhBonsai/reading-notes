@@ -54,3 +54,18 @@ void Sio_error(char s[]);
 /* Unix IO Wrapper */
 int Open(const char *pathname, int flags, mode_t mode);
 void Close(int fd);
+ssize_t Read(int fd, void *buf, size_t count);
+ssize_t Write(int fd, const void *buf, size_t count);
+
+ssize_t rio_readn(int fd, void *usrbuf, size_t n);
+ssize_t rio_writen(int fd, void *userbuf, size_t n);
+void rio_readinitb(rio_t *rp, int fd);
+ssize_t rio_readnb(rio_t *rp, void *usrbuf, size_t n);
+ssize_t rio_readlineb(rio_t *rp, void *usrbuf, size_t maxlen);
+
+
+ssize_t Rio_readn(int fd, void *usrbuf, size_t n);
+void Rio_writen(int fd, void *userbuf, size_t n);
+void Rio_readinitb(rio_t *rp, int fd);
+ssize_t Rio_readnb(rio_t *rp, void *usrbuf, size_t n);
+ssize_t Rio_readlineb(rio_t *rp, void *usrbuf, size_t maxlen);

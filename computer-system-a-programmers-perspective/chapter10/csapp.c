@@ -155,6 +155,71 @@ void Close(int fd)
 {
 		int rc;
 		if ((rc=close(fd)) < 0)
-				unix_eror("Close error");
+				unix_error("Close error");
 
 }
+
+
+ssize_t Read(int fd, void *buf, size_t count)
+{
+	ssize_t rc;
+
+	if ((rc = read(fd, buf, count)) < 0)
+			unix_error("Read error");
+	return rc;
+}
+
+ssize_t Write(int fd, const void *buf, size_t count)
+{
+	ssize_t rc;
+	if ((rc = write(fd, buf, count)) < 0)
+			unix_error("Write error");
+	return rc;
+}
+
+
+ssize_t rio_readn(int fd, void *usrbuf, size_t n)
+{
+	size_t nleft = n;
+	ssize_t nread;
+	char *bufp = usrbuf;
+
+
+	while (nleft > 0) {
+		if((nread = read(fd, bufp, nleft)) < 0) {
+				if (errno == EINTR)
+						nread = 0;
+				else 
+						return -1;
+
+		}
+
+		else if (nread == 0)
+				break;
+		nleft -= nread;
+		bufp += nread;
+
+	}
+	return (n-nleft);
+}
+
+ssize_t rio_writen(int fd, void *userbuf, size_t n)
+{
+		size_T nleft = n;
+		ssize_t nwritten;
+		char *bufp = usrbuf;
+
+		while (nleft > 0){
+				if ((nwritten = write(fd, bufp, nleft)) <= 0) {
+						if (errno == EINTR)
+								nwritten = 0;
+						else 
+								return -1;
+						nleft -= nwritten;
+						bufp += nwritten;
+				}
+		}
+		return n;
+
+}
+	

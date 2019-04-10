@@ -12,7 +12,7 @@ LZDLIBS = -lpthread
 
 PROGS = statcheck\
 		cpfile\
-		cpstdin\
+		stdin\
 		hello\
 		ffiles1\
 		ffiles2\
