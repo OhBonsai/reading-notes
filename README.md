@@ -8,6 +8,7 @@
 
 
 ## 待看
+- [Pointer on C](https://pan.baidu.com/s/19fO3yW7XSQl4kZpEZwciqQ)  密码: 6zle
 - [redis设计与实现](https://pan.baidu.com/s/1zodfxpfsvzGiW5v7LYWCcQ)
 - Inside the Python Virtual Machine
 - A Python Interpreter Written in Python
