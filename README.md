@@ -19,3 +19,11 @@
 - Sqlite源码深度剖析
 - Libevent源码深度剖析
 - Structure and Interpretation of Computer Programs [课程](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/video-lectures/)
+
+## 分类
+
+### 单机并发的原理
+- Seven Concurrency Models in Seven Weeks
+- 计算机组成原理/计算机系统结构  冯诺依曼体系结构, IO的硬件表达
+- 深入理解计算机系统 IO的软件表达
+- 协程的实现
