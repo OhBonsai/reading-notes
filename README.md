@@ -11,6 +11,7 @@
 - [Pointer on C](https://pan.baidu.com/s/19fO3yW7XSQl4kZpEZwciqQ)  密码: 6zle
 - [redis设计与实现](https://pan.baidu.com/s/1zodfxpfsvzGiW5v7LYWCcQ)
 - Inside the Python Virtual Machine
+- Learning C in hard way
 - A Python Interpreter Written in Python
 - Seven Concurrency Models in Seven Weeks
 - Writing A Compiler In Go
