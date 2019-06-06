@@ -9,6 +9,7 @@
 - [redis设计与实现](https://pan.baidu.com/s/1zodfxpfsvzGiW5v7LYWCcQ)
 
 ## 待看
+- [汇编语言-王爽]() 
 - [Pointer on C](https://pan.baidu.com/s/19fO3yW7XSQl4kZpEZwciqQ)  密码: 6zle
 - Inside the Python Virtual Machine
 - A Python Interpreter Written in Python
@@ -27,3 +28,6 @@
 - 计算机组成原理/计算机系统结构  冯诺依曼体系结构, IO的硬件表达
 - 深入理解计算机系统 IO的软件表达
 - 协程的实现
+
+### 数据库
+- 汇编语言， 苦难法学c， redis设计与实现， graphonRedis, sqlonredis
