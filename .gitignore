@@ -54,3 +54,4 @@ dkms.conf
 
 .idea
 cmake-build-debug
+rust-redis

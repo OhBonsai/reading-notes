@@ -17,8 +17,10 @@
 - Rust 可以结合redis来学
     - Rust 写redis module很有优势，参考redisjson2
     - Rust 重写redis，但是只实现简单的k,v
+    - Rust 程序设计语言
+    - Rust by example
     - Rust 编程之道 
-    - Rust 深入浅粗 大概翻完
+    - Rust 深入浅出 大概翻完
 - [nginx](https://github.com/y123456yz/reading-code-of-nginx-1.9.2)
 - [Pointer on C](https://pan.baidu.com/s/19fO3yW7XSQl4kZpEZwciqQ)  提取码: 6zle
 - [Libuv](https://github.com/luohaha/Chinese-uvbookl)
