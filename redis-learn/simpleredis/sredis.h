@@ -33,9 +33,9 @@ static inline size_t string_avail(const String s) {
     return sh->free;
 }
 
-String new_string(const char *init);
-void free_string(String s);
-_Bool compare_string(const String s1, const String s2);
+String string_new(const char *init);
+void string_free(String s);
+_Bool string_compare(const String s1, const String s2);
 
 
 /*
@@ -49,10 +49,10 @@ typedef struct entry {
     void *key;
     void *val;
     struct entry *next;
-} Entry;
+} DictEntry;
 
 typedef struct {
-    Entry **table;
+    DictEntry **table;
     unsigned long size;
     unsigned long size_mask;
     unsigned long used;
@@ -75,29 +75,66 @@ typedef struct {
     int iterator_num;
 } Dict;
 
+typedef struct {
+    Dict *d;
+    int index;
+    DictEntry *entry, *next_entry;
+} DictIterator;
+
 #define dict_free_val(d, entry) do {\
-    if ((d)->type->free_value) \
-        (d)->type->free_value((entry)->v.val) \
+    if ((d)->methods->free_value) \
+        (d)->methods->free_value((entry)->v.val) \
 } while(0)
 
 #define dict_set_val(d, entry, _val_) do { \
-    if ((d)->type->copy_value) \
-        entry->v.val = (d)->type->copy_value(_val_); \
+    if ((d)->methods->copy_value) \
+        entry->v.val = (d)->methods->copy_value(_val_); \
     else \
         entry->v.val = (_val_); \
 } while(0)
 
 
 #define dict_free_key(d, entry) do \
-    if ((d)->type->free_key) \
-        (d)->type->free_key((entry)->key)
+    if ((d)->methods->free_key) \
+        (d)->methods->free_key((entry)->key)
 
 #define dict_set_key(d, entry, _key_) do { \
-    if ((d)->type->copy_key) \
-        entry->key = (d)->type->copy_key(_key_); \
+    if ((d)->methods->copy_key) \
+        entry->key = (d)->methods->copy_key(_key_); \
     else \
         entry->key = (_key_); \
 } while(0)
+
+#define dict_compare_key(d, key1, key2) \
+    (((d)->methods->compare_key) ? \
+        (d)->methods->compare_key(key1, key2) :\
+        (key1) == (key2))
+
+#define dict_hash_key(d, key) (d)->methods->hash_func(key)
+#define entry_key(entry) ((entry)->key)
+#define entry_val(entry) ((entry)->val)
+#define dict_slots(d) ((d)->ht.size)
+#define dict_size(d) ((d)->ht.used)
+
+Dict *dict_new(DictClassMethod *methods);
+int dict_expand(Dict *d, unsigned long size);
+int dict_add(Dict *d, void *key, void *val);
+int dict_replace(Dict *d, void *key, void *val);
+int dict_del(Dict *d, const void *key);
+int dict_del_without_free(Dict *d, const void *key);
+
+void dict_free(Dict *d);
+DictEntry *dict_find(Dict *d, const void *key);
+
+int dict_resize(Dict *d);
+DictIterator *dict_get_iterator(Dict *d);
+DictEntry *dict_next(DictIterator *iter);
+void dict_iterator_free(DictIterator *iter);
+
+
+
+
+
 
 
 

@@ -11,7 +11,7 @@
  * String
  * ========================================
  */
-String new_string(const char *init) {
+String string_new(const char *init) {
     struct sdshdr *sh;
     size_t init_len = strlen(init);
 
@@ -27,13 +27,13 @@ String new_string(const char *init) {
 
 
 
-void free_string(String s) {
+void string_free(String s) {
     if (s == NULL) return;
     free(s - sizeof(struct sdshdr));
 }
 
 
-_Bool compare_string(const String s1, const String s2) {
+_Bool string_compare(const String s1, const String s2) {
     size_t l1, l2, min_len;
 
     _Bool cmp;
@@ -50,28 +50,33 @@ _Bool compare_string(const String s1, const String s2) {
 
 /*
  * ========================================
- * IntSet
+ * HashTable Dict
  * ========================================
  */
-#define INTSET_ENC_INT16 (sizeof(int16_t))
-#define INTSET_ENC_INT32 (sizeof(int32_t))
-#define INTSET_ENC_INT64 (sizeof(int64_t))
 
-IntSet *NewIntSet(void);
-IntSet *IntSetAdd(IntSet *is, int64_t value, uint8_t *success);
-IntSet *IntSetRemove(IntSet *is, int64_t value, uint8_t *success);
-uint8_t IntSetFind(IntSet *is, int64_t value);
-uint8_t IntSetGet(IntSet *is, uint32_t pos, int64_t *value);
-uint32_t IntSetLen(IntSet *is);
-uint32_t IntSetBlobLen(IntSet *is);
+Dict *dict_new(DictClassMethod *methods);
+int dict_expand(Dict *d, unsigned long size);
+int dict_add(Dict *d, void *key, void *val);
+int dict_replace(Dict *d, void *key, void *val);
+int dict_del(Dict *d, const void *key);
+int dict_del_without_free(Dict *d, const void *key);
+
+void dict_free(Dict *d);
+DictEntry *dict_find(Dict *d, const void *key);
+
+int dict_resize(Dict *d);
+DictIterator *dict_get_iterator(Dict *d);
+DictEntry *dict_next(DictIterator *iter);
+void dict_iterator_free(DictIterator *iter);
+
 
 
 int main(int argc, char **argv) {
-    String s = new_string("abc");
-    String s2 = new_string("abcd");
+    String s = string_new("abc");
+    String s2 = string_new("abcd");
 
-    free_string(s);
+    string_free(s);
 
-    printf("%s==%s: %d\n", s, s2, compare_string(s, s2));
+    printf("%s==%s: %d\n", s, s2, string_compare(s, s2));
     return 0;
 }
