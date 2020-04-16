@@ -43,8 +43,6 @@ _Bool string_compare(const String s1, const String s2);
  * HashTable
  * ========================================
  */
-#define DICT_HT_INITIAL_SIZE 4
-
 typedef struct entry {
     void *key;
     void *val;
@@ -67,10 +65,10 @@ typedef struct {
 
     void (*free_key)(void *key);
     void (*free_value)(void *obj);
-} DictClassMethod;
+} DictVoidTable;
 
 typedef struct {
-    DictClassMethod *methods;
+    DictVoidTable *methods;
     HashTable *ht;
     int iterator_num;
 } Dict;
@@ -81,22 +79,23 @@ typedef struct {
     DictEntry *entry, *next_entry;
 } DictIterator;
 
-#define dict_free_val(d, entry) do {\
+#define dict_free_val(d, entry) do { \
     if ((d)->methods->free_value) \
-        (d)->methods->free_value((entry)->v.val) \
+        (d)->methods->free_value((entry)->val); \
 } while(0)
 
 #define dict_set_val(d, entry, _val_) do { \
     if ((d)->methods->copy_value) \
-        entry->v.val = (d)->methods->copy_value(_val_); \
+        entry->val = (d)->methods->copy_value(_val_); \
     else \
-        entry->v.val = (_val_); \
+        entry->val = (_val_); \
 } while(0)
 
 
-#define dict_free_key(d, entry) do \
+#define dict_free_key(d, entry) do {\
     if ((d)->methods->free_key) \
-        (d)->methods->free_key((entry)->key)
+        (d)->methods->free_key((entry)->key); \
+} while(0)
 
 #define dict_set_key(d, entry, _key_) do { \
     if ((d)->methods->copy_key) \
@@ -116,17 +115,14 @@ typedef struct {
 #define dict_slots(d) ((d)->ht.size)
 #define dict_size(d) ((d)->ht.used)
 
-Dict *dict_new(DictClassMethod *methods);
-int dict_expand(Dict *d, unsigned long size);
-int dict_add(Dict *d, void *key, void *val);
-int dict_replace(Dict *d, void *key, void *val);
-int dict_del(Dict *d, const void *key);
-int dict_del_without_free(Dict *d, const void *key);
+Dict *dict_new(DictVoidTable *methods);
+_Bool dict_expand(Dict *d);
+_Bool dict_add(Dict *d, void *key, void *val);
+_Bool dict_del(Dict *d, const void *key);
 
 void dict_free(Dict *d);
 DictEntry *dict_find(Dict *d, const void *key);
 
-int dict_resize(Dict *d);
 DictIterator *dict_get_iterator(Dict *d);
 DictEntry *dict_next(DictIterator *iter);
 void dict_iterator_free(DictIterator *iter);
