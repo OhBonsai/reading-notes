@@ -7,14 +7,33 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 #include <stdint.h>
 
 
 /*
  * ========================================
- * String
+ * Tool
  * ========================================
  */
+long long ms(void) {
+    struct timeval tv;
+    long long ust;
+
+    gettimeofday(&tv, NULL);
+    ust = ((long long) tv.tv_sec) * 1000000;
+    ust += tv.tv_usec;
+    return ust / 1000;
+}
+
+/*
+ * ========================================
+ * Data Structure
+ * ========================================
+ */
+
+
+// ================String================
 typedef char* String;
 
 struct sdshdr{
@@ -38,11 +57,8 @@ void string_free(String s);
 _Bool string_compare(const String s1, const String s2);
 
 
-/*
- * ========================================
- * HashTable
- * ========================================
- */
+
+// ================HashTable================
 typedef struct entry {
     void *key;
     void *val;
@@ -127,10 +143,44 @@ DictEntry *dict_next(DictIterator *iter);
 void dict_iterator_free(DictIterator *iter);
 
 
+/*
+ * ========================================
+ * Object
+ * ========================================
+ */
+enum  object_type{
+    STR_TYPE,
+    HASH_TYPE,
+};
+
+typedef struct {
+    unsigned type:2;
+    unsigned lru:30;
+
+    int refcount;
+    void *ptr;
+} Object;
+
+Object *new_string_obj(char *ptr, size_t len);
+Object *new_hash_obj(void);
 
 
+void inc_ref(Object *o) {
+    o->refcount++;
+}
 
 
+void dec_ref(Object *o) {
+    if (o->refcount == 1) {
+        switch(o->type) {
+            case STR_TYPE: break;
+            case HASH_TYPE: dict_free((Dict*)o->ptr); break;
+        }
+        free(o);
+    } else {
+        o->refcount--;
+    }
+}
 
 
 #endif //REDIS_LEARN_SREDIS_H

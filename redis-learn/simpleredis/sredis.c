@@ -5,11 +5,18 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
+
 
 /*
  * ========================================
- * String
+ * Data Structure
  * ========================================
+ */
+
+
+/*
+ * ================String================
  */
 String string_new(const char *init) {
     struct sdshdr *sh;
@@ -49,9 +56,7 @@ _Bool string_compare(const String s1, const String s2) {
 }
 
 /*
- * ========================================
- * HashTable Dict
- * ========================================
+ * ================Dict================
  */
 
 unsigned int dict_hash_func(const void *key) {
@@ -93,6 +98,15 @@ unsigned int dict_hash_func(const void *key) {
 
     return (unsigned int) h;
 }
+
+DictVoidTable vt = {
+        dict_hash_func,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+};
 
 
 Dict *dict_new(DictVoidTable *methods) {
@@ -287,6 +301,48 @@ void dict_iterator_free(DictIterator *iter) {
 }
 
 
+/*
+ * ========================================
+ * Data Structure
+ * ========================================
+ */
+// String
+Object *init_string_obj(char *ptr, size_t len) {
+    Object *o = malloc(sizeof(Object) + sizeof(String) + len + 1);
+    struct sdshdr *sh = (void*)(o+1);
+
+    o->type = STR_TYPE;
+    o->lru = ms();
+    o->ptr = sh + 1;
+    o->refcount = 1;
+
+    sh->len = len;
+    sh->free = 0;
+
+    if (ptr) {
+        memcpy(sh->buf, ptr, len);
+        sh->buf[len] = '\0';
+    } else {
+        memset(sh->buf, 0, len+1);
+    }
+    return o;
+}
+
+
+// hashtable
+Object *init_hash_obj(void) {
+    Dict *d = dict_new(&vt);
+    Object *o = malloc(sizeof(*o));
+
+    o->type = HASH_TYPE;
+    o->ptr = d;
+    o->refcount = 1;
+    o->lru = ms();
+
+    return o;
+}
+
+
 
 int main(int argc, char **argv) {
 //    String s = string_new("abc");
@@ -297,22 +353,17 @@ int main(int argc, char **argv) {
 //    printf("%s==%s: %d\n", s, s2, string_compare(s, s2));
 //    printf("%d\n",  3 / (2 * 1.0) < 1);
 //
-    DictVoidTable vt = {
-            dict_hash_func,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL
-    };
 
-    Dict *d = dict_new(&vt);
-    const char* k = "abc";
-    const char* v = "bc";
+//
+//    Dict *d = dict_new(&vt);
+//    const char* k = "abc";
+//    const char* v = "bc";
+//
+//    dict_add(d,  k , v);
+//
+//    printf("%s", ((char *)dict_find(d, k)->val));
 
-    dict_add(d,  k , v);
 
-    printf("%s", ((char *)dict_find(d, k)->val));
-
+    printf("%lld", ms());
     return 0;
 }
