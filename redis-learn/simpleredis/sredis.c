@@ -54,16 +54,58 @@ _Bool string_compare(const String s1, const String s2) {
  * ========================================
  */
 
+unsigned int dict_hash_func(const void *key) {
+    uint32_t seed = 5381;
+    const uint32_t m = 0x5bd1e995;
+    const int r = 24;
+    const unsigned char *data = (const unsigned char *) key;
+    int len = strlen(data);
+    uint32_t h = seed ^len;
+
+
+    while (len >= 4) {
+        uint32_t k = *(uint32_t *) data;
+
+        k *= m;
+        k ^= k >> r;
+        k *= m;
+
+        h *= m;
+        h ^= k;
+
+        data += 4;
+        len -= 4;
+    }
+
+    switch (len) {
+        case 3:
+            h ^= data[2] << 16;
+        case 2:
+            h ^= data[1] << 8;
+        case 1:
+            h ^= data[0];
+            h *= m;
+    };
+
+    h ^= h >> 13;
+    h *= m;
+    h ^= h >> 15;
+
+    return (unsigned int) h;
+}
+
+
 Dict *dict_new(DictVoidTable *methods) {
     Dict *d = malloc(sizeof(*d));
+    HashTable *ht = malloc(sizeof(*ht));
 
-    d->ht->table = NULL;
-    d->ht->size = 0;
-    d->ht->size_mask = 0;
-    d->ht->used = 0;
+    d->ht = ht;
+    ht->table = NULL;
+    ht->size = 0;
+    ht->size_mask = 0;
+    ht->used = 0;
 
     d->methods = methods;
-    d->iterator_num = 0;
 
     dict_expand(d);
     return d;
@@ -204,30 +246,45 @@ void dict_free(Dict *d) {
 
 
 // 如何解决迭代器期间，entry被释放的问题
-//DictIterator *dict_get_iterator(Dict *d) {
-//    DictIterator *iter = malloc(sizeof(*iter));
-//
-//    iter->d = d;
-//    iter->index = -1;
-//    iter->entry = NULL;
-//    iter->next_entry = NULL;
-//
-//    return iter;
-//}
-//
-//DictEntry *dict_next(DictIterator *iter) {
-//    while (1) {
-//        if (iter->entry == NULL) {
-//            HashTable *ht = iter->d->ht;
-//
-//
-//            if (iter->index == -1 && iter->)
-//        }
-//    }
-//
-//    return NULL;
-//}
-//void dict_iterator_free(DictIterator *iter);
+// 没有StepRehash不用考虑这个问题
+DictIterator *dict_get_iterator(Dict *d) {
+    DictIterator *iter = malloc(sizeof(*iter));
+
+    iter->d = d;
+    iter->index = -1;
+    iter->entry = NULL;
+    iter->next_entry = NULL;
+
+    return iter;
+}
+
+DictEntry *dict_next(DictIterator *iter) {
+    while (1) {
+        if (iter->entry == NULL) {
+            HashTable *ht = iter->d->ht;
+            iter->index++;
+
+            if (iter->index >= (signed) ht->size) {
+                break;
+            }
+
+            iter->entry = ht->table[iter->index];
+        } else {
+            iter->entry = iter->next_entry;
+        }
+
+        if (iter->entry) {
+            iter->next_entry = iter->entry->next;
+            return iter->entry;
+        }
+    }
+
+    return NULL;
+}
+
+void dict_iterator_free(DictIterator *iter) {
+    free(iter);
+}
 
 
 
@@ -238,7 +295,24 @@ int main(int argc, char **argv) {
 //    string_free(s);
 //
 //    printf("%s==%s: %d\n", s, s2, string_compare(s, s2));
+//    printf("%d\n",  3 / (2 * 1.0) < 1);
+//
+    DictVoidTable vt = {
+            dict_hash_func,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+    };
 
-    printf("%d\n",  3 / (2 * 1.0) < 1);
+    Dict *d = dict_new(&vt);
+    const char* k = "abc";
+    const char* v = "bc";
+
+    dict_add(d,  k , v);
+
+    printf("%s", ((char *)dict_find(d, k)->val));
+
     return 0;
 }

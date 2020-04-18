@@ -70,7 +70,6 @@ typedef struct {
 typedef struct {
     DictVoidTable *methods;
     HashTable *ht;
-    int iterator_num;
 } Dict;
 
 typedef struct {
