@@ -7,7 +7,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sys/time.h>
 #include <stdint.h>
 
 
@@ -16,15 +16,7 @@
  * Tool
  * ========================================
  */
-long long ms(void) {
-    struct timeval tv;
-    long long ust;
-
-    gettimeofday(&tv, NULL);
-    ust = ((long long) tv.tv_sec) * 1000000;
-    ust += tv.tv_usec;
-    return ust / 1000;
-}
+long long ms(void);
 
 /*
  * ========================================
@@ -82,6 +74,7 @@ typedef struct {
     void (*free_key)(void *key);
     void (*free_value)(void *obj);
 } DictVoidTable;
+extern DictVoidTable vt;
 
 typedef struct {
     DictVoidTable *methods;
@@ -161,26 +154,33 @@ typedef struct {
     void *ptr;
 } Object;
 
-Object *new_string_obj(char *ptr, size_t len);
-Object *new_hash_obj(void);
+Object *init_string_obj(char *ptr, size_t len);
+Object *init_hash_obj(void);
+void inc_ref(Object *o);
+void dec_ref(Object *o);
+_Bool dict_compare_func(const void *key1, const void *key2);
 
 
-void inc_ref(Object *o) {
-    o->refcount++;
-}
+
+/*
+ * ========================================
+ * DB
+ * ========================================
+ */
+typedef struct {
+    Dict *dict;
+    Dict *expires;
+    Dict *blocking_keys;
+    Dict *ready_keys;
+    Dict *watched_keys;
+} DB;
+
+typedef struct server {
+    DB *db;
+    Dict *commands;
+} Server;
 
 
-void dec_ref(Object *o) {
-    if (o->refcount == 1) {
-        switch(o->type) {
-            case STR_TYPE: break;
-            case HASH_TYPE: dict_free((Dict*)o->ptr); break;
-        }
-        free(o);
-    } else {
-        o->refcount--;
-    }
-}
 
 
 #endif //REDIS_LEARN_SREDIS_H

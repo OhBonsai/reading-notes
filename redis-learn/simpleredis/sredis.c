@@ -10,6 +10,22 @@
 
 /*
  * ========================================
+ * Tool
+ * ========================================
+ */
+long long ms(void) {
+    struct timeval tv;
+    long long ust;
+
+    gettimeofday(&tv, NULL);
+    ust = ((long long) tv.tv_sec) * 1000000;
+    ust += tv.tv_usec;
+    return ust / 1000;
+}
+
+
+/*
+ * ========================================
  * Data Structure
  * ========================================
  */
@@ -99,11 +115,21 @@ unsigned int dict_hash_func(const void *key) {
     return (unsigned int) h;
 }
 
+
+_Bool dict_compare_func(const void *key1, const void *key2) {
+    if (key1 == key2) return true;
+
+    return string_compare(
+            (String)((Object *)key1)->ptr,
+            (String)((Object *)key2)->ptr
+    );
+}
+
 DictVoidTable vt = {
         dict_hash_func,
         NULL,
         NULL,
-        NULL,
+        dict_compare_func,
         NULL,
         NULL
 };
@@ -136,7 +162,7 @@ _Bool dict_expand(Dict *d) {
     }
     new_mask = new_size - 1;
 
-    DictEntry **table2 = malloc(new_size * sizeof(DictEntry*));
+    DictEntry **table2 = calloc(new_size, sizeof(DictEntry*));
     d->ht->used = 0;
 
 
@@ -187,7 +213,7 @@ _Bool dict_del(Dict *d, const void *key) {
     DictEntry *de, *pre_de;
     unsigned int h, idx;
 
-    if (d->ht->size == 0) return NULL;
+    if (d->ht->size == 0 || d->ht->used == 0) return NULL;
 
     h = dict_hash_key(d, key);
     idx = h & d->ht->size_mask;
@@ -221,7 +247,7 @@ DictEntry *dict_find(Dict *d, const void *key) {
     DictEntry *de;
     unsigned int h, idx;
 
-    if (d->ht->size == 0) return NULL;
+    if (d->ht->size == 0 || d->ht->used == 0) return NULL;
 
     h = dict_hash_key(d, key);
     idx = h & d->ht->size_mask;
@@ -303,9 +329,28 @@ void dict_iterator_free(DictIterator *iter) {
 
 /*
  * ========================================
- * Data Structure
+ * Object
  * ========================================
  */
+void inc_ref(Object *o) {
+    o->refcount++;
+}
+
+
+void dec_ref(Object *o) {
+    if (o->refcount == 1) {
+        switch(o->type) {
+            case STR_TYPE: break;
+            case HASH_TYPE: dict_free((Dict*)o->ptr); break;
+        }
+        free(o);
+    } else {
+        o->refcount--;
+    }
+}
+
+
+
 // String
 Object *init_string_obj(char *ptr, size_t len) {
     Object *o = malloc(sizeof(Object) + sizeof(String) + len + 1);
@@ -342,28 +387,11 @@ Object *init_hash_obj(void) {
     return o;
 }
 
+/*
+ * ========================================
+ * DB
+ * ========================================
+ */
 
 
-int main(int argc, char **argv) {
-//    String s = string_new("abc");
-//    String s2 = string_new("abcd");
-//
-//    string_free(s);
-//
-//    printf("%s==%s: %d\n", s, s2, string_compare(s, s2));
-//    printf("%d\n",  3 / (2 * 1.0) < 1);
-//
 
-//
-//    Dict *d = dict_new(&vt);
-//    const char* k = "abc";
-//    const char* v = "bc";
-//
-//    dict_add(d,  k , v);
-//
-//    printf("%s", ((char *)dict_find(d, k)->val));
-
-
-    printf("%lld", ms());
-    return 0;
-}
