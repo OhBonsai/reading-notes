@@ -162,6 +162,7 @@ _Bool dict_compare_func(const void *key1, const void *key2);
 
 
 
+
 /*
  * ========================================
  * DB
@@ -175,12 +176,32 @@ typedef struct {
     Dict *watched_keys;
 } DB;
 
-typedef struct server {
+
+/*
+ * ========================================
+ * Event
+ * ========================================
+ */
+struct EventLoop;
+typedef void FileProc(struct EventLoop *eventLoop, int fd, void *clientData, int mask);
+
+
+
+
+/*
+ * ========================================
+ * Server
+ * ========================================
+ */
+typedef struct {
     DB *db;
     Dict *commands;
+
+    int port;
 } Server;
 
-
+extern Server server;
+void init_server();
 
 
 #endif //REDIS_LEARN_SREDIS_H

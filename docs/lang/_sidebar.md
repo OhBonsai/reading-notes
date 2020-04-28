@@ -1,1 +1,3 @@
-- [<span class="iconfont iconrenzheng"></span> Python](/lang/python/README.md)
+- [<span class="iconfont iconpython"></span> Python](/lang/python/README.md)
+    - [GIL](/lang/python/gil.md)
+- [<span class="iconfont iconrust"></span> Rust](/lang/rust/README.md)

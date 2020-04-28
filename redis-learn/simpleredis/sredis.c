@@ -392,6 +392,10 @@ Object *init_hash_obj(void) {
  * DB
  * ========================================
  */
+//struct Server server;
+
+void init_server() {
 
 
+}
 

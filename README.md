@@ -9,7 +9,14 @@
 
 ## 正在
 - [redis设计与实现](https://pan.baidu.com/s/1zodfxpfsvzGiW5v7LYWCcQ)
-- Go夜读
+    - 网络编程不了解，先看看UNIX网络编程2，3，4，5，6章
+    - [unix网络编程卷一]()
+- [python源码解析]
+    - 由于python的锁直接用了操作系统的锁，线程也是对操作系统用户线程的封装， 这一块有点卡死了
+    - 看[unix网络编程卷二]()第三部分同步
+    - [Python源码贡献](https://devguide.python.org/coverage/)
+
+
 
 ## 待看
 - 跟着我实现docker
