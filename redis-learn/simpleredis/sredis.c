@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <time.h>
 
+#define BONSAI_DEBUG 1
+
 
 /*
  * ========================================
@@ -74,8 +76,17 @@ _Bool string_compare(const String s1, const String s2) {
 /*
  * ================Dict================
  */
-
 unsigned int dict_hash_func(const void *key) {
+    uint32_t seed = 5381;
+    const uint32_t m = 0x5bd1e995;
+    const int r = 24;
+    const unsigned char *data = (const unsigned char *) key;
+    int len = strlen(data);
+    return (unsigned int) len;
+}
+
+// 这个hash真的屌，抄袭都能抄错
+unsigned int dict_hash_func2(const void *key) {
     uint32_t seed = 5381;
     const uint32_t m = 0x5bd1e995;
     const int r = 24;
@@ -195,6 +206,9 @@ _Bool dict_expand(Dict *d) {
 
 _Bool dict_add(Dict *d, void *key, void *val) {
     unsigned int index = dict_hash_key(d, key) & d->ht->size_mask;
+#ifdef BONSAI_DEBUG
+    printf("hash %s: %d\n", (String)((Object*)key)->ptr, index);
+#endif
     DictEntry *entry = malloc(sizeof(&entry));
 
 
@@ -217,6 +231,9 @@ _Bool dict_del(Dict *d, const void *key) {
 
     h = dict_hash_key(d, key);
     idx = h & d->ht->size_mask;
+#ifdef BONSAI_DEBUG
+    printf("hash %s: %d\n", (String)((Object*)key)->ptr, idx);
+#endif
     de = d->ht->table[idx];
     pre_de = NULL;
 
@@ -251,6 +268,10 @@ DictEntry *dict_find(Dict *d, const void *key) {
 
     h = dict_hash_key(d, key);
     idx = h & d->ht->size_mask;
+
+#ifdef BONSAI_DEBUG
+    printf("hash %s: %d\n", (String)((Object*)key)->ptr, idx);
+#endif
     de = d->ht->table[idx];
 
     while(de) {

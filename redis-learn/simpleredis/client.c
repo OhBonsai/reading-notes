@@ -14,6 +14,7 @@
 #define MAXLINE 9999
 
 
+
 int main(int argc, char **argv) {
 
     int socket_fd ;
@@ -40,7 +41,9 @@ int main(int argc, char **argv) {
         size_t len= 0;
         size_t line_size = 0;
         line_size = getline(&line, &len, stdin);
-        write(socket_fd, line, line_size - 1);
+        if (write(socket_fd, line, line_size - 1) < 0) {
+           perror("write error");
+        }
         free(line);
     }
     return 0;
