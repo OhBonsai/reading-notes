@@ -13,10 +13,13 @@
     - 别用自己的数据结构，用glib吧。。。
     - [unix网络编程卷一]()
     - redis5.0.9 CMAKE构建
+    - [epoll的网络库](https://mp.weixin.qq.com/s/agIYfq_7Bu6WAJ-zJ2f1CQ)
 - [python源码解析]
     - 由于python的锁直接用了操作系统的锁，线程也是对操作系统用户线程的封装， 这一块有点卡死了
     - 看[unix网络编程卷二]()第三部分同步
     - [Python源码贡献](https://devguide.python.org/coverage/)
+    - 闭包的实现
+- goevent库
 - 也许真的要考虑能够看懂rust, rust-python redis-json2都是rust写的。 真的非常不错。而且
 包管理机制，项目管理，测试，文档，Rust都非常不错啊！
 
