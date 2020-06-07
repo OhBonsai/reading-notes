@@ -1,4 +1,4 @@
 - [Linux性能优化 Gotalk](/linux/gotalklinuxperformace/README.md)
     - [CPU性能](/linux/gotalklinuxperformace/stage1.md)
-    - [CPU性能2](/linux/gotalklinuxperformace/stage2.md)
+    - [CPU性能2](/linux/gotalklinuxperformace/week2.md)
 
