@@ -69,8 +69,7 @@ sudo rpm -Uvh sysstat-11.7.3-1.x86_64.rpm
 - 碰到 CPU 使用率升高的问题，你可以借助 top、pidstat 等工具，确认引发 CPU 性能问题的来源；再使用 perf 等工具，排查出引起性能问题的具体函数。
 
 
-## 实操问题
-- Prometheus CPU 老是100%,用pidstat perf观察，和用gopprof观察，分析问题的思路有啥相似的地方
+
  
 
 

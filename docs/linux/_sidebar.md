@@ -1,3 +1,4 @@
-- [GoTalk1](/linux/gotalklinuxperformace/README.md)
-    - [Stage1](/linux/gotalklinuxperformace/stage1.md)
+- [Linux性能优化 Gotalk](/linux/gotalklinuxperformace/README.md)
+    - [CPU性能](/linux/gotalklinuxperformace/stage1.md)
+    - [CPU性能2](/linux/gotalklinuxperformace/stage2.md)
 
