@@ -1,11 +1,14 @@
 //
 // Created by 盆栽 on 2020/5/7.
-//
 
 #ifndef SIMPLEREDIS_EVENT_H
 #define SIMPLEREDIS_EVENT_H
 
 #include <glib.h>
+#include <stdbool.h>
+
+#define AE_OK 0
+#define AE_ERR -1
 
 #define AE_NONE 0
 #define AE_READABLE 1
@@ -13,55 +16,47 @@
 
 #define AE_FILE_EVENTS 1
 #define AE_TIME_EVENTS 2
-#define AE_ALL_EVENTS (AE_FILE_EVENT|AE_TIME_EVENTS)
+#define AE_ALL_EVENTS 3
 #define AE_DONT_WAIT 4
+
 #define AE_NOMORE -1
 
-
-typedef void fileHandler(struct EL *el, inf fd, void *data, int mask);
-typedef int timeHandler(struct EL *el, long id, void *data);
-typedef void eventFree(struct EL *el, void *data);
+struct eventLoop;
+typedef void fileProc(struct eventLoop *eventLoop, int fd, void *clientdata, int mask);
 
 
-typedef struct EL {
-    int max_fd;
-    int set_size;
+typedef struct {
+    int mask;
+    fileProc *rfileProc;
+    fileProc *wfileProc;
+    void *clientData
+} FileEvent;
 
-    long time_next_id;
-    GSList *time_event_list;
-    GSList *register_file_event_list;
-    GSList *ready_file_event_list;
 
-    void *data;
+typedef struct{
+    int fd;
+    int mask;
+} FiredEvent;
+
+
+typedef struct eventLoop {
+    int maxfd;
+    int setsize;
+
+    FileEvent *event;
+    FiredEvent *fired;
+
     int stop;
+    void *apidata;
 } EventLoop;
 
-typedef struct TE{
-    long id;
-    long when;
+EventLoop *NewEventLoop(int setsize);
+void FreeEventLoop(EventLoop *el);
+int CreateFileEvent(EventLoop *el, int fd, int mask, fileProc *proc, void *clientData);
+void FreeFileEvent(EventLoop *el, int fd, int mask);
+int GetFileEvent(EventLoop *el, int fd);
+int Wait(EventLoop *el);
 
-    timeHandler *handle_func;
-    eventFree *free_func;
-} TimeEvent;
-
-typedef struct FE {
-    int mask;
-    fileHandler *read_handle_func;
-    fileHandler *write_handle_func;
-
-    void *data;
-};
-
-EventLoop *new_event_loop();
-long create_time_event(
-        EventLoop *el,
-        long ms,
-        timeHandler *handler,
-        void *data,
-        eventFree *free_func
-);
-int delete_time_event(EventLoop *el, long id);
-int stop_event_lop(EventLoop *el);
-
+void Main(EventLoop *el);
 
 #endif //SIMPLEREDIS_EVENT_H
