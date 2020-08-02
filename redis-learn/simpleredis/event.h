@@ -43,7 +43,7 @@ typedef struct eventLoop {
     int maxfd;
     int setsize;
 
-    FileEvent *event;
+    FileEvent *events;
     FiredEvent *fired;
 
     int stop;
@@ -55,8 +55,7 @@ void FreeEventLoop(EventLoop *el);
 int CreateFileEvent(EventLoop *el, int fd, int mask, fileProc *proc, void *clientData);
 void FreeFileEvent(EventLoop *el, int fd, int mask);
 int GetFileEvent(EventLoop *el, int fd);
-int Wait(EventLoop *el);
-
+int ProcessEvent(EventLoop *el, int flags);
 void Main(EventLoop *el);
 
 #endif //SIMPLEREDIS_EVENT_H
