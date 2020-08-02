@@ -1,6 +1,4 @@
-//
 // Created by 盆栽 on 2020/5/7.
-//
 
 #include "event.h"
 #include <sys/epoll.h>
@@ -79,7 +77,7 @@ static void ApiDeleteEvent(EventLoop *eventLoop, int fd, int delmask) {
     if (mask != AE_NONE) {
         epoll_ctl(state->epfd, EPOLL_CTL_MOD, fd, &ee);
     } else {
-        epol_ctl(state->epfd, EPOLL_CTL_DEL, fd, &ee);
+        epoll_ctl(state->epfd, EPOLL_CTL_DEL, fd, &ee);
     }
 }
 
