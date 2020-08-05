@@ -18,6 +18,24 @@
 const int PORT = 8888;
 
 
+void ReadQueryFromClient(struct eventLoop *eventLoop, int fd, void *clientdata, int mask) {
+    // 这里先每次读1000Byte
+    int nread, readlen=1000;
+    char buf[readlen];
+
+    nread = read(fd, buf, sizeof(buf));
+
+    if (nread == -1) {
+        printf("read from connect fail");
+    } else {
+        // 处理输入
+        buf[nread] = '\0';
+        printf("I got stream %s", buf);
+    }
+}
+
+
+
 static int ListenPort() {
     int listen_fd;
     struct sockaddr_in server_addr;
@@ -103,26 +121,19 @@ void AcceptUnixHandler(EventLoop *el, int fd, void *privdata, int mask) {
         }
 
         CreateFileEvent(el, conn_fd, AE_READABLE,
-                        readQueryFromClient, NULL);
+                        ReadQueryFromClient, NULL);
     }
 
 }
 
+int main(int argc, char **argv) {
+    int listen_fd = ListenPort();
+    EventLoop *el = NewEventLoop(100);
+    AcceptUnixHandler(el, listen_fd, NULL, 100);
 
-void readQueryFromClient(struct eventLoop *eventLoop, int fd, void *clientdata, int mask) {
-    // 这里先每次读1000Byte
-    int nread, readlen=1000;
-    char buf[readlen];
 
-    nread = read(fd, buf, sizeof(buf));
 
-    if (nread == -1) {
-        printf("read from connect fail");
-    } else {
-        // 处理输入
-        buf[nread] = '\0';
-        printf("I got stream %s", buf);
-    }
+    return 0;
 }
 
 
