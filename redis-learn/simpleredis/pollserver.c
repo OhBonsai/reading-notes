@@ -52,7 +52,7 @@ static int ListenPort() {
     server_addr.sin_port = htons(PORT);
 
     int opt_param = 1;
-    if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &opt_param, sizeof(opt_param) == -1)) {
+    if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &opt_param, sizeof(opt_param)) == -1) {
         perror("set socket reuse error");
         exit(1);
     }
@@ -98,6 +98,8 @@ void AcceptUnixHandler(EventLoop *el, int fd, void *privdata, int mask) {
 
     while(max--) {
         conn_fd = AcceptConnect(fd);
+        printf("got connection 1");
+
         if (conn_fd == -1) {
             printf("connect fail");
         };
@@ -130,9 +132,6 @@ int main(int argc, char **argv) {
     int listen_fd = ListenPort();
     EventLoop *el = NewEventLoop(100);
     AcceptUnixHandler(el, listen_fd, NULL, 100);
-
-
-
     return 0;
 }
 

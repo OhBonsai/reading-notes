@@ -11,7 +11,7 @@ pkg_check_modules(glib REQUIRED IMPORTED_TARGET glib-2.0)
 
 #add_executable(server server.c sredis.c sredis.h)
 #add_executable(server glibserver.c event.c event.h)
-add_executable(server pollserver.c event.c event.h)
+add_executable(server event.c event.h pollserver.c)
 target_link_libraries(server PRIVATE PkgConfig::glib)
 
 
