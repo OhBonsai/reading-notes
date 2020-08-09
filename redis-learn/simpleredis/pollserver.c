@@ -62,6 +62,18 @@ static int ListenPort() {
         exit(1);
     }
 
+    int flags;
+    if ((flags = fcntl(listen_fd, F_GETFL)) == -1) {
+        perror("get file state fail");
+        exit(1);
+    }
+
+    if (fcntl(listen_fd, flags | O_NONBLOCK) == -1) {
+        perror("set socket nonblock fail");
+        exit(1);
+    }
+
+
     if (listen(listen_fd, 511) == -1) {
         perror("listen error");
         close(listen_fd);
@@ -98,7 +110,7 @@ void AcceptUnixHandler(EventLoop *el, int fd, void *privdata, int mask) {
 
     while(max--) {
         conn_fd = AcceptConnect(fd);
-        printf("got connection 1");
+        printf("accept connection %d\n", conn_fd);
 
         if (conn_fd == -1) {
             printf("connect fail");
@@ -131,7 +143,12 @@ void AcceptUnixHandler(EventLoop *el, int fd, void *privdata, int mask) {
 int main(int argc, char **argv) {
     int listen_fd = ListenPort();
     EventLoop *el = NewEventLoop(100);
-    AcceptUnixHandler(el, listen_fd, NULL, 100);
+    if (CreateFileEvent(el, listen_fd, AE_READABLE, AcceptUnixHandler, NULL) == AE_ERR){
+        exit(1);
+    }
+    printf("staring polling event");
+    Main(el);
+    FreeEventLoop(el);
     return 0;
 }
 
