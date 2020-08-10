@@ -1,6 +1,7 @@
 // Created by 盆栽 on 2020/5/7.
 
 #include <sys/epoll.h>
+#include <stdio.h>
 
 
 typedef struct {
@@ -10,8 +11,12 @@ typedef struct {
 
 
 static int ApiCreate(EventLoop *eventLoop) {
+
+
     ApiState *state = malloc(sizeof(ApiState));
     if (!state) return -1;
+
+    fprintf(stderr, "Api create");
 
     state->events = malloc(sizeof(struct epoll_event) * eventLoop->setsize);
     if (!state->events) {
@@ -40,6 +45,10 @@ static int ApiResize(EventLoop *eventLoop, int setsize) {
 static int ApiAddEvent(EventLoop *eventLoop, int fd, int mask) {
     ApiState *state = eventLoop->apidata;
     struct epoll_event ee;
+
+
+    fprintf(stderr, "Api add event");
+
 
     int op = eventLoop->events[fd].mask == AE_NONE ? EPOLL_CTL_ADD : EPOLL_CTL_MOD;
     ee.events = 0;

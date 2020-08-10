@@ -35,7 +35,6 @@ void ReadQueryFromClient(struct eventLoop *eventLoop, int fd, void *clientdata, 
 }
 
 
-
 static int ListenPort() {
     int listen_fd;
     struct sockaddr_in server_addr;
@@ -108,7 +107,7 @@ static int AcceptConnect(int listen_fd) {
 void AcceptUnixHandler(EventLoop *el, int fd, void *privdata, int mask) {
     int conn_fd, max = 1000;
 
-    while(max--) {
+//    while(max--) {
         conn_fd = AcceptConnect(fd);
         printf("accept connection %d\n", conn_fd);
 
@@ -136,7 +135,7 @@ void AcceptUnixHandler(EventLoop *el, int fd, void *privdata, int mask) {
 
         CreateFileEvent(el, conn_fd, AE_READABLE,
                         ReadQueryFromClient, NULL);
-    }
+//    }
 
 }
 
@@ -146,13 +145,9 @@ int main(int argc, char **argv) {
     if (CreateFileEvent(el, listen_fd, AE_READABLE, AcceptUnixHandler, NULL) == AE_ERR){
         exit(1);
     }
-    printf("staring polling event");
+    printf("staring polling event\n");
     Main(el);
     FreeEventLoop(el);
     return 0;
 }
-
-
-
-
 

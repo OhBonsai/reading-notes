@@ -3,6 +3,7 @@
 #include "event.h"
 #include <sys/time.h>
 #include <sys/errno.h>
+#include <stdio.h>
 #include <poll.h>
 
 
@@ -102,9 +103,15 @@ int ProcessEvent(EventLoop *el, int flags) {
 
     if (!(flags & AE_FILE_EVENTS)) return 0;
 
+    struct timeval ts;
+    ts.tv_sec = 5;
+
+
     if (el->maxfd != -1 || !(flags & AE_DONT_WAIT) ) {
         int j;
-        numevents = ApiPoll(el, NULL);
+        numevents = ApiPoll(el, &ts);
+        fprintf(stderr, "numevents %d\n", numevents);
+
 
         for (j=0; j<numevents; j++) {
             FileEvent *fe = &(el->events[el->fired[j].fd]);
