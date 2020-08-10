@@ -67,7 +67,7 @@ static int ListenPort() {
         exit(1);
     }
 
-    if (fcntl(listen_fd, flags | O_NONBLOCK) == -1) {
+    if (fcntl(listen_fd, F_SETFL, flags | O_NONBLOCK) == -1) {
         perror("set socket nonblock fail");
         exit(1);
     }
