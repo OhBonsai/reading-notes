@@ -3,6 +3,11 @@ project(simpleredis C)
 
 set(CMAKE_C_STANDARD 99)
 
+#GDB调试
+SET(CMAKE_BUILD_TYPE "Debug")
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall"
+
 set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig")
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(glib REQUIRED IMPORTED_TARGET glib-2.0)
