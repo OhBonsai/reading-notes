@@ -141,7 +141,7 @@ void AcceptUnixHandler(EventLoop *el, int fd, void *privdata, int mask) {
 
 int main(int argc, char **argv) {
     int listen_fd = ListenPort();
-    EventLoop *el = NewEventLoop(100);
+    EventLoop *el = NewEventLoop(32);
     if (CreateFileEvent(el, listen_fd, AE_READABLE, AcceptUnixHandler, NULL) == AE_ERR){
         exit(1);
     }

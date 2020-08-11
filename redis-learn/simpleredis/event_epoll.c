@@ -12,7 +12,6 @@ typedef struct {
 
 static int ApiCreate(EventLoop *eventLoop) {
 
-
     ApiState *state = malloc(sizeof(ApiState));
     if (!state) return -1;
 
