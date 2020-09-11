@@ -8,6 +8,7 @@
 
 
 ## 正在
+- Docker源码分析(孙宏亮)
 - [redis设计与实现](https://pan.baidu.com/s/1zodfxpfsvzGiW5v7LYWCcQ)
     - 网络编程不了解，先看看UNIX网络编程2，3，4，5，6章
     - 别用自己的数据结构，用glib吧。。。
@@ -26,7 +27,6 @@
 
 ## 待看
 - 跟着我实现docker
-- Docker源码分析(孙宏亮)
 - Rust 可以结合redis来学
     - Rust 写redis module很有优势，参考redisjson2
     - Rust 重写redis，但是只实现简单的k,v
