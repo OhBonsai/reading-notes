@@ -5,16 +5,12 @@
 - 深入理解计算机系统 [Computer Systems: A Programmer's Perspective](https://github.com/OhBonsai/reading-notes/blob/master/a-programmers-perspective-prentice-hall/a-programmers-perspective-prentice-hall.pdf)  [代码](http://csapp.cs.cmu.edu/public/code.html)
 - C语言程序设计现代方法 [网盘](https://pan.baidu.com/s/16q9Zfb2gnBrvetNQYrE5rg) 提取码: na81
 - 汇编语言-王爽 [网盘](https://pan.baidu.com/s/1QEFn3khyphuZ8uc6vWjNLw) 提取码:t0tb
-
+- Docker源码分析(孙宏亮) [网盘](https://pan.baidu.com/s/1Pse_WqCt9bKAVhWpiKLJRA) 提取码:wj3n
 
 ## 正在
-- Docker源码分析(孙宏亮)
 - [redis设计与实现](https://pan.baidu.com/s/1zodfxpfsvzGiW5v7LYWCcQ)
-    - 网络编程不了解，先看看UNIX网络编程2，3，4，5，6章
-    - 别用自己的数据结构，用glib吧。。。
-    - [unix网络编程卷一]()
-    - redis5.0.9 CMAKE构建
-    - [epoll的网络库](https://mp.weixin.qq.com/s/agIYfq_7Bu6WAJ-zJ2f1CQ)
+- [redis开发与运维]
+- [redis核心原理和应用实践]
 - [python源码解析]
     - 由于python的锁直接用了操作系统的锁，线程也是对操作系统用户线程的封装， 这一块有点卡死了
     - 看[unix网络编程卷二]()第三部分同步
