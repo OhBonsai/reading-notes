@@ -8,6 +8,7 @@
 - Docker源码分析(孙宏亮) [网盘](https://pan.baidu.com/s/1Pse_WqCt9bKAVhWpiKLJRA) 提取码:wj3n
 
 ## 正在
+- 深入理解计算机系统(go读书会二刷)
 - [redis设计与实现](https://pan.baidu.com/s/1zodfxpfsvzGiW5v7LYWCcQ)
 - [redis开发与运维]
 - [redis核心原理和应用实践]
